@@ -1,1 +1,2 @@
-![Criando slide](https://github.com/LuisAraujo/jogo-snake-oficina-canvas/blob/main/screens/screen_create.png?raw=true)
+![Criando slide](https://github.com/LuisAraujo/jogo-snake-oficina-canvas/blob/main/print.png?raw=true)
+
