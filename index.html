@@ -1,0 +1,110 @@
+<html>
+<head>
+    <style>
+        body{
+            background-color: #999;
+        }
+        #canvas{
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <script>
+
+        function Score(){
+            this.point =0;
+            this.render = function(){
+                ctx.font = "20px serif";
+                ctx.fillStyle = "#fff";
+                ctx.fillText("Score: "+this.point, 400, 20);
+            }
+        }
+        function Block(x,y){
+            this.x = x;
+            this.y = y;
+            this.render = function(ctx){
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(this.x*20, this.y*20, 19,19);
+            }
+        }
+
+        function Eat(x,y){
+            this.x = x;
+            this.y = y;
+            this.render = function(ctx){
+                ctx.fillStyle = "#f00";
+                ctx.fillRect(this.x*20, this.y*20, 19,19);
+            }
+
+            this.newPosition = function(){
+                eat.x = parseInt(Math.random()*20);
+                eat.y = parseInt(Math.random()*20);
+            }
+        }
+        function Snake(){
+            this.blocks = [ new Block(0,0) ];
+            this.dir = "down";
+
+            this.update = function(){
+
+                for(var i = this.blocks.length-1; i > 0 ;i--){
+                    this.blocks[i].x = this.blocks[i-1].x;
+                    this.blocks[i].y = this.blocks[i-1].y;
+                }
+
+                if(this.dir == "down")
+                    this.blocks[0].y++;
+                else if(this.dir == "up")
+                    this.blocks[0].y--;
+                else if(this.dir == "left")
+                    this.blocks[0].x--;
+                else if(this.dir == "right")
+                    this.blocks[0].x++;
+
+
+                if((this.blocks[0].x == eat.x) && (this.blocks[0].y == eat.y)){
+                    eat.newPosition();
+                    this.blocks.push( new Block());
+                    score.point++;
+                }
+            }
+            this.render = function(ctx){
+                for(var i = 0; i < this.blocks.length;i++)
+                    this.blocks[i].render(ctx);
+            }
+        }
+
+        canvas = document.getElementById('canvas');
+        ctx = canvas.getContext("2d");
+        var snake = new Snake();
+        var eat = new Eat(10,10);
+        var score = new Score();
+        
+        function loopgame(){
+            ctx.clearRect(0,0,500,500);
+            snake.update();
+            snake.render(ctx);
+            eat.render(ctx);
+            score.render(ctx);
+        }
+        loopgame();
+        setInterval(loopgame, 200);
+        
+        document.addEventListener("keydown", function(e){
+ 
+            if(e.keyCode == 39)
+                snake.dir = 'right';
+            else if(e.keyCode == 40)
+                snake.dir = 'down';
+            else if(e.keyCode == 37)
+                snake.dir = 'left';
+            else if(e.keyCode == 38)
+                snake.dir = 'up';
+
+        })
+
+    </script>
+</body>
+</html>
